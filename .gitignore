@@ -1,0 +1,7 @@
+SchoolAPI/bin/
+
+SchoolAPI/obj/
+
+.vs/
+
+SchoolAPI/appsettings.Development.json
