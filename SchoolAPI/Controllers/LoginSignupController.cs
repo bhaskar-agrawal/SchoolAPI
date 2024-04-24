@@ -1,4 +1,5 @@
-﻿using Kusto.Data.Exceptions;
+﻿/*using Asp.Versioning;*/
+using Kusto.Data.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.IdentityModel.Tokens;
@@ -12,11 +13,13 @@ using System.Text;
 namespace SchoolAPI.Controllers
 {
     [ApiController]
+    /*[ApiVersion("1.0")]*/
     [Route("schoolapi/auth/")]
     public class LoginSignupController : Controller
     {
         private SchoolAPIService schoolAPIService;
         private readonly IConfiguration configuration;
+
 
         public LoginSignupController(SchoolAPIService schoolApiService, IConfiguration configuration)
         {
@@ -24,6 +27,15 @@ namespace SchoolAPI.Controllers
             this.configuration = configuration;
         }
 
+        /// <summary>
+        /// Signup a new user
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <response code="201">User created successfully</response>
+        /// <response code="409">UserName already exists</response>
+        /// <response code="500">Internal server error DB or API is down</response>
+        /// <response code="400"> Request is not right</response>
         [HttpPost("signup")]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -61,6 +73,17 @@ namespace SchoolAPI.Controllers
                 }
             }
         }
+
+        /// <summary>
+        /// Login a user
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <response code = "200">User logged in successfully</response>
+        /// <response code = "400">Login Request is not right</response>
+        /// <response code = "401">Invalid Password</response>
+        /// <response code = "404">User is not registered, first needs a signup</response>
+        /// <response code = "500">Internal server error DB or API is down</response>
 
         [HttpPost("login")]
         [ProducesResponseType(StatusCodes.Status200OK)]

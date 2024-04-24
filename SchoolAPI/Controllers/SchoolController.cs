@@ -23,6 +23,16 @@ namespace SchoolAPI.Controllers
             this.schoolAPIService = schoolApiService;
         }
 
+        /// <summary>
+        /// Update marks for a student, can be done by teacher only
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        /// <response code = "201">Marks updated successfully</response>
+        /// <response code = "404">Student not found</response>
+        /// <response code = "409">Marks already exists</response>
+        /// <response code = "500">Internal server error DB or API is down</response>
+
         [Authorize(Policy = "UserRolePolicy")]
         [HttpPost("marks")]
         [ProducesResponseType(StatusCodes.Status201Created)]
@@ -58,6 +68,14 @@ namespace SchoolAPI.Controllers
             }
         }
 
+        /// <summary>
+        /// Get marks of a student subjectwise
+        /// </summary>
+        /// <param name="studentName"></param>
+        /// <returns></returns>
+        /// <response code = "200">Success in getting marks and subject</response>
+        /// <response code = "404">Student not found</response>
+    
         [HttpGet("marks")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

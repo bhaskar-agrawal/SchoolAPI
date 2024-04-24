@@ -1,13 +1,16 @@
+/*using Asp.Versioning;*/
 using Azure.Monitor.OpenTelemetry.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OpenTelemetry.Metrics;
+using Microsoft.OpenApi.Models;
 using SchoolAPI.DAL;
 using SchoolAPI.Models;
 using SchoolAPI.Service;
 using System.Diagnostics.Metrics;
 using System.Security.Claims;
 using System.Text;
+using System.Reflection;
 
 internal class Program
 {
@@ -19,8 +22,17 @@ internal class Program
 
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc("v1", new OpenApiInfo
+            {
+                Version = "v1",
+                Title = "School API",
+                Description = "An ASP.NET Core Web API for managing students marks with proper RBAC enabled",
+            });
+            var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+        });
 
         string? otelConnectionString;
         string? authSecretKey;
@@ -88,8 +100,17 @@ internal class Program
         builder.Services.AddSingleton<KustoAuthDetails>(kustoAuth);
         builder.Services.AddSingleton<IDataClient>(dataClient);
         builder.Services.AddSingleton<SchoolAPIService>(apiService);
-        
+
+       /* builder.Services.AddApiVersioning(setupAction =>
+        {
+            setupAction.ReportApiVersions = true;
+            setupAction.AssumeDefaultVersionWhenUnspecified = true;
+            setupAction.DefaultApiVersion = new ApiVersion(1, 0);
+        });*/
+
         var app = builder.Build();
+
+       
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
