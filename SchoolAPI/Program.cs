@@ -82,10 +82,12 @@ internal class Program
             AppKey = kustoAppKey
         };
 
+        IDataClient dataClient = new KustoDataClient(builder.Configuration, kustoAuth);
+        SchoolAPIService apiService = new SchoolAPIService(dataClient, builder.Configuration);
+
         builder.Services.AddSingleton<KustoAuthDetails>(kustoAuth);
-        builder.Services.AddSingleton<IDataClient, KustoDataClient>();
-        builder.Services.AddSingleton<SchoolAPIService>();
-      
+        builder.Services.AddSingleton<IDataClient>(dataClient);
+        builder.Services.AddSingleton<SchoolAPIService>(apiService);
         
         var app = builder.Build();
 
