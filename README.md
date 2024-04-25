@@ -56,6 +56,8 @@ Body: [
         "marks": 32
     }
 ]
+![image](https://github.com/bhaskar-agrawal/SchoolAPI/assets/52082502/34935c66-19c5-4d9e-8da5-6134fee08091)
+
 
 
 # Docs and Links:
