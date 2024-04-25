@@ -94,23 +94,16 @@ internal class Program
             AppKey = kustoAppKey
         };
 
-        IDataClient dataClient = new KustoDataClient(builder.Configuration, kustoAuth);
-        SchoolAPIService apiService = new SchoolAPIService(dataClient, builder.Configuration);
-
         builder.Services.AddSingleton<KustoAuthDetails>(kustoAuth);
-        builder.Services.AddSingleton<IDataClient>(dataClient);
-        builder.Services.AddSingleton<SchoolAPIService>(apiService);
+        builder.Services.AddSingleton<IDataClient, KustoDataClient>();
+        builder.Services.AddSingleton<SchoolAPIService>();
 
-       /* builder.Services.AddApiVersioning(setupAction =>
-        {
-            setupAction.ReportApiVersions = true;
-            setupAction.AssumeDefaultVersionWhenUnspecified = true;
-            setupAction.DefaultApiVersion = new ApiVersion(1, 0);
-        });*/
 
         var app = builder.Build();
 
-       
+        IDataClient dataClient = app.Services.GetService<IDataClient>();
+        SchoolAPIService apiService = app.Services.GetService<SchoolAPIService>();
+
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
