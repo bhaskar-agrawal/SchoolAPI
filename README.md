@@ -71,4 +71,7 @@ Body: [
 # Future scope:
 1. Integrate SQL DB.
 2. Add custom metrics.
-3. Deploy code using docker and kubernetes. 
+3. Deploy code using docker and kubernetes.
+4. Add sample put and patch request.
+5. Add get type of url in post request.
+6. Add versioning.
